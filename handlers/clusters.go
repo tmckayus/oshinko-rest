@@ -84,15 +84,30 @@ func assignConfig(config *models.NewClusterConfig) *coreclusters.ClusterConfig {
 	if config == nil {
 		return nil
 	}
-	result := &coreclusters.ClusterConfig{
+
+	result := coreclusters.ClusterConfig{
 		Name: config.Name,
 		MasterCount: int(config.MasterCount),
 		WorkerCount: int(config.WorkerCount),
 		SparkMasterConfig: config.SparkMasterConfig,
 		SparkWorkerConfig: config.SparkWorkerConfig,
-		SparkImage: config.SparkImage,
+		SparkImage: config.SparkImage}
+
+	if config.Metrics != nil {
+		result.Metrics = coreclusters.MetricsConfig{
+			Enable: config.Metrics.Enable,
+			Carbon: config.Metrics.Carbon,
+			Graphite: config.Metrics.Graphite,
+		}
 	}
-	return result
+
+	if config.Scorpionstare != nil {
+		result.ScorpionStare = coreclusters.ScorpionStareConfig{
+			Enable: config.Scorpionstare.Enable,
+			Image: config.Scorpionstare.Image,
+		}
+	}
+	return &result
 }
 
 // CreateClusterResponse create a cluster and return the representation

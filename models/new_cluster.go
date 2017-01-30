@@ -83,9 +83,17 @@ type NewClusterConfig struct {
 	 */
 	MasterCount int64 `json:"masterCount,omitempty"`
 
+	/* metrics
+	 */
+	Metrics *NewClusterConfigMetrics `json:"metrics,omitempty"`
+
 	/* The name of a stored cluster configuration
 	 */
 	Name string `json:"name,omitempty"`
+
+	/* scorpionstare
+	 */
+	Scorpionstare *NewClusterConfigScorpionstare `json:"scorpionstare,omitempty"`
 
 	/* The docker pull specification of a custom image to use for spark pods
 	 */
@@ -106,6 +114,102 @@ type NewClusterConfig struct {
 
 // Validate validates this new cluster config
 func (m *NewClusterConfig) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateMetrics(formats); err != nil {
+		// prop
+		res = append(res, err)
+	}
+
+	if err := m.validateScorpionstare(formats); err != nil {
+		// prop
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *NewClusterConfig) validateMetrics(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Metrics) { // not required
+		return nil
+	}
+
+	if m.Metrics != nil {
+
+		if err := m.Metrics.Validate(formats); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *NewClusterConfig) validateScorpionstare(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Scorpionstare) { // not required
+		return nil
+	}
+
+	if m.Scorpionstare != nil {
+
+		if err := m.Scorpionstare.Validate(formats); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+/*NewClusterConfigMetrics Metrics deployment configuration values
+
+swagger:model NewClusterConfigMetrics
+*/
+type NewClusterConfigMetrics struct {
+
+	/* The image to use for the carbon component
+	 */
+	Carbon string `json:"carbon,omitempty"`
+
+	/* Whether or not to deploy metrics components on the spark master. Default is false.
+	 */
+	Enable string `json:"enable,omitempty"`
+
+	/* The image to use for the graphite api component
+	 */
+	Graphite string `json:"graphite,omitempty"`
+}
+
+// Validate validates this new cluster config metrics
+func (m *NewClusterConfigMetrics) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+/*NewClusterConfigScorpionstare Scorpion stare configuration values
+
+swagger:model NewClusterConfigScorpionstare
+*/
+type NewClusterConfigScorpionstare struct {
+
+	/* Whether or not to deploy scorpion stare components on the spark master. Default is false.
+	 */
+	Enable string `json:"enable,omitempty"`
+
+	/* The image to use for the scorpion stare daemon
+	 */
+	Image string `json:"image,omitempty"`
+}
+
+// Validate validates this new cluster config scorpionstare
+func (m *NewClusterConfigScorpionstare) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if len(res) > 0 {

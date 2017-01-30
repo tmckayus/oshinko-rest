@@ -131,6 +131,36 @@ definitions:
             description: |-
               The docker pull specification of a custom image to use for spark pods
             type: string
+          metrics:
+            description: |-
+              Metrics deployment configuration values
+            type: object
+            properties:
+              enable:
+                description: |-
+                  Whether or not to deploy metrics components on the spark master. Default is false.
+                type: string
+              carbon:
+                description: |-
+                  The image to use for the carbon component
+                type: string
+              graphite:
+                description: |-
+                  The image to use for the graphite api component
+                type: string
+          scorpionstare:
+            description: |-
+              Scorpion stare configuration values
+            type: object
+            properties:
+              enable:
+                description: |-
+                  Whether or not to deploy scorpion stare components on the spark master. Default is false.
+                type: string
+              image:
+                description: |-
+                  The image to use for the scorpion stare daemon
+                type: string
     required:
       - name
     additionalProperties: false
